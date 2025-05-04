@@ -1,0 +1,32 @@
+# Source files
+src/
+lib/
+
+# Development configs
+.eslintrc.json
+.prettierrc
+.vscode/
+.github/
+.gitignore
+.git/
+tsconfig.json
+tsconfig.build.json
+rollup.config.js
+vite.config.ts
+eslint.config.js
+
+# Dependencies
+node_modules/
+
+# Build artifacts
+coverage/
+.nyc_output/
+.cache/
+.bun/
+.rollup.cache/
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log* 

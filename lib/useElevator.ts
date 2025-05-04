@@ -27,13 +27,17 @@ import { UseElevatorOptions, UseElevatorResult } from "./types";
  * );
  * ```
  */
-export const useElevator = ({
-  targetElement,
-  duration: customDuration = 0,
-  verticalPadding = 0,
-  startCallback,
-  endCallback,
-}: UseElevatorOptions): UseElevatorResult => {
+export const useElevator = (
+  options: UseElevatorOptions = {}
+): UseElevatorResult => {
+  const {
+    targetElement,
+    duration: customDuration = 0,
+    verticalPadding = 0,
+    startCallback,
+    endCallback,
+  } = options;
+
   // Track whether the elevator is currently active
   const [isElevating, setIsElevating] = useState<boolean>(false);
 

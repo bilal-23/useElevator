@@ -1,6 +1,6 @@
 {
   "name": "use-elevator",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "author": "Bilal Mansuri",
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
-  "description": "A delightful React hook that transforms boring scroll-to-top actions into playful elevator experiences with music and smooth animations",
+  "description": "A React hook for smooth scrolling that transforms boring scroll-to-top actions into playful elevator experiences with customizable settings",
   "files": [
     "dist",
     "README.md",
@@ -60,8 +60,5 @@
     "prepublishOnly": "bun run build:lib",
     "start": "bun --bun vite"
   },
-  "types": "dist/index.d.ts",
-  "dependencies": {
-    "use-elevator": "./use-elevator-0.1.0.tgz"
-  }
+  "types": "dist/index.d.ts"
 }
