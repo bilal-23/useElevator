@@ -1,7 +1,7 @@
 {
   "name": "use-elevator",
   "version": "0.1.0",
-  "description": "A React hook for smooth scrolling with elevator music",
+  "description": "A delightful React hook that transforms boring scroll-to-top actions into playful elevator experiences with music and smooth animations",
   "author": "Bilal Mansuri",
   "license": "MIT",
   "main": "dist/index.js",
