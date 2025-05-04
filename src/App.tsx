@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { useElevator } from "use-elevator";
+import { useElevator } from "../lib/index";
 import bearImg from "./assets/bear.png";
 import bear2Img from "./assets/bear-2.png";
 import cameraImg from "./assets/camera.png";
@@ -116,6 +116,7 @@ const Section = ({ text, image, id, name }: SectionProps) => {
 interface ElevatorSettings {
   duration: number;
   targetElement: string | undefined;
+  verticalPadding: number;
 }
 
 // ScrollToTop Component with Settings
@@ -123,11 +124,13 @@ const ScrollToTop = React.memo(() => {
   const [settings, setSettings] = React.useState<ElevatorSettings>({
     duration: 5000,
     targetElement: undefined,
+    verticalPadding: 0,
   });
 
   const { startElevating, isElevating } = useElevator({
     duration: settings.duration,
     targetElement: settings.targetElement,
+    verticalPadding: settings.verticalPadding,
   });
 
   const handleSettingsChange = (
@@ -144,7 +147,9 @@ const ScrollToTop = React.memo(() => {
     <div className="scroll-to-top-container">
       <div className="elevator-settings">
         <div className="setting-group">
-          <label htmlFor="duration">Duration (ms):</label>
+          <label htmlFor="duration">
+            <span>⏱️ Duration (ms):</span>
+          </label>
           <input
             id="duration"
             type="range"
@@ -156,11 +161,31 @@ const ScrollToTop = React.memo(() => {
               handleSettingsChange("duration", Number(e.target.value))
             }
           />
-          <span className="duration-value">{settings.duration}ms</span>
+          <span className="setting-value">{settings.duration}ms</span>
         </div>
 
         <div className="setting-group">
-          <label htmlFor="target-element">Target Element:</label>
+          <label htmlFor="vertical-padding">
+            <span>↕️ Vertical Padding (px):</span>
+          </label>
+          <input
+            id="vertical-padding"
+            type="range"
+            min="0"
+            max="200"
+            step="10"
+            value={settings.verticalPadding}
+            onChange={(e) =>
+              handleSettingsChange("verticalPadding", Number(e.target.value))
+            }
+          />
+          <span className="setting-value">{settings.verticalPadding}px</span>
+        </div>
+
+        <div className="setting-group">
+          <label htmlFor="target-element">
+            <span>🎯 Target Element:</span>
+          </label>
           <select
             id="target-element"
             value={settings.targetElement || ""}
@@ -181,7 +206,7 @@ const ScrollToTop = React.memo(() => {
 
       <div className="scroll-to-top" onClick={startElevating}>
         <img src={images.up} alt="up arrow" />
-        <p>{isElevating ? "Going up..." : "Lessgoooo"}</p>
+        <p>{isElevating ? "Going up..." : "Let's Go!"}</p>
       </div>
     </div>
   );
@@ -234,7 +259,7 @@ function App() {
               <span className="title-tag">React Hook</span>
             </h1>
             <p className="subtitle">
-              A smooth scrolling React hook with elevator music, inspired by{" "}
+              A smooth scrolling React hook, inspired by{" "}
               <a
                 href="https://tholman.com/elevator.js/"
                 target="_blank"
@@ -242,8 +267,8 @@ function App() {
               >
                 elevator.js
               </a>
-              . Fixes those awkward "scroll to top" moments the old fashioned
-              way.
+              . <br />
+              Fixes those awkward "scroll to top" moments the old fashioned way.
             </p>
           </div>
 
