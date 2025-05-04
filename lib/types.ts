@@ -14,24 +14,6 @@ export interface UseElevatorOptions {
   duration?: number;
 
   /**
-   * URL of the audio to play during scroll.
-   * Defaults to the built-in elevator music if audio is enabled.
-   */
-  mainAudioUrl?: string;
-
-  /**
-   * URL of the audio to play once scrolling finishes.
-   * Defaults to the built-in "ding" sound if audio is enabled.
-   */
-  endAudioUrl?: string;
-
-  /**
-   * Whether to play audio during the scroll.
-   * @default true
-   */
-  audio?: boolean;
-
-  /**
    * Padding from the target element to stop above it.
    * @default 0
    */

@@ -1,14 +1,13 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   calculateElementScrollPosition,
   calculateScrollDuration,
   easeInOutQuad,
 } from "./utils/animation";
-import { AudioManager } from "./utils/audio";
 import { UseElevatorOptions, UseElevatorResult } from "./types";
 
 /**
- * A React hook that provides a smooth scrolling effect with elevator music.
+ * A React hook that provides a smooth scrolling effect.
  * Inspired by elevator.js but reimagined as a React hook with TypeScript support.
  *
  * @param {UseElevatorOptions} options - Configuration options for the elevator effect
@@ -17,7 +16,6 @@ import { UseElevatorOptions, UseElevatorResult } from "./types";
  * @example
  * ```jsx
  * const { startElevating, isElevating } = useElevator({
- *   audio: true,
  *   duration: 2000,
  *   targetElement: 'section-id'
  * });
@@ -32,9 +30,6 @@ import { UseElevatorOptions, UseElevatorResult } from "./types";
 export const useElevator = ({
   targetElement,
   duration: customDuration = 0,
-  mainAudioUrl,
-  endAudioUrl,
-  audio = true,
   verticalPadding = 0,
   startCallback,
   endCallback,
@@ -48,39 +43,6 @@ export const useElevator = ({
   const endPositionRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
 
-  // Create audio manager and store in ref to persist across renders
-  const audioManagerRef = useRef<AudioManager | null>(null);
-
-  // Initialize audio manager on first render and when audio options change
-  useEffect(() => {
-    // Create audio manager if it doesn't exist
-    if (!audioManagerRef.current) {
-      try {
-        audioManagerRef.current = new AudioManager({
-          enabled: audio,
-          mainAudioUrl,
-          endAudioUrl,
-        });
-      } catch (error) {
-        console.error("Failed to initialize audio manager:", error);
-      }
-    } else {
-      // Update audio sources if they've changed
-      audioManagerRef.current.updateAudioSources({
-        enabled: audio,
-        mainAudioUrl,
-        endAudioUrl,
-      });
-    }
-
-    // Cleanup audio resources when component unmounts
-    return () => {
-      if (audioManagerRef.current) {
-        audioManagerRef.current.cleanup();
-      }
-    };
-  }, [audio, mainAudioUrl, endAudioUrl]);
-
   // Handle window blur - stop animation and jump to end position
   useEffect(() => {
     const handleBlur = () => {
@@ -91,9 +53,6 @@ export const useElevator = ({
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
       }
-
-      // Stop audio
-      audioManagerRef.current?.stopAllAudio();
 
       // Jump to destination
       if (endPositionRef.current !== null) {
@@ -165,9 +124,6 @@ export const useElevator = ({
       if (runtime < duration) {
         animationFrameRef.current = requestAnimationFrame(animateScroll);
       } else {
-        // Animation complete - play end sound
-        audioManagerRef.current?.playEndSound();
-
         // Execute callback if provided
         if (endCallback) {
           endCallback();
@@ -184,18 +140,11 @@ export const useElevator = ({
   );
 
   /**
-   * Start the elevator effect - initiates scrolling with audio.
+   * Start the elevator effect - initiates scrolling.
    */
   const startElevating = useCallback(() => {
     // Prevent starting if already active
     if (isElevating) return;
-
-    // Start elevator music
-    try {
-      audioManagerRef.current?.startMainAudio();
-    } catch (error) {
-      console.error("Failed to play audio:", error);
-    }
 
     // Set state to active
     setIsElevating(true);

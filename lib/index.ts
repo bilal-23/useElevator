@@ -1,16 +1,15 @@
 /**
- * useElevator - A React hook for smooth scrolling with elevator music
+ * useElevator - A React hook for smooth scrolling
  * @module use-elevator
  */
 
-// Export the main hook
+// Re-export the hook
 export { useElevator } from "./useElevator";
 
-// Export types for TypeScript users
+// Re-export types
 export type { UseElevatorOptions, UseElevatorResult } from "./types";
 
 // Export utilities for advanced use cases
-export { AudioManager } from "./utils/audio";
 export {
   easeInOutQuad,
   calculateElementScrollPosition,

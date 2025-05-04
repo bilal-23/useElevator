@@ -1,6 +1,6 @@
 # useElevator
 
-A React hook for smooth scrolling with elevator music. Inspired by [Elevator.js](https://tholman.com/elevator.js/).
+A React hook for smooth scrolling. Inspired by [Elevator.js](https://tholman.com/elevator.js/).
 
 ## Installation
 
@@ -17,15 +17,13 @@ yarn add use-elevator
 ## Features
 
 - Smooth scrolling to the top of the page or a specified element
-- Elevator music during scrolling (optional)
-- Ding sound when reaching the destination (optional)
 - Customizable animation duration
 - Callback functions for scroll start and end
 - TypeScript support
 
 ## How It Works
 
-The `useElevator` hook is designed to create a smooth, pleasant scrolling experience while adding a touch of humor with elevator music. Here's a detailed breakdown of how it works:
+The `useElevator` hook is designed to create a smooth, pleasant scrolling experience. Here's a detailed breakdown of how it works:
 
 ### Core Animation
 
@@ -34,17 +32,6 @@ The `useElevator` hook is designed to create a smooth, pleasant scrolling experi
 2. **Easing Function**: Rather than linear scrolling, the hook uses a quadratic easing function (`easeInOutQuad`) that starts slow, accelerates in the middle, and decelerates at the end - mimicking a real elevator's movement.
 
 3. **Duration Calculation**: If no duration is provided, the hook automatically calculates an appropriate duration based on the scroll distance - longer distances get proportionally longer durations (with a maximum cap).
-
-### Audio Management
-
-1. **Audio Players**: The hook creates two audio players:
-
-   - Main audio: Elevator music that plays during scrolling
-   - End audio: A "ding" sound that plays when scrolling finishes
-
-2. **Dynamic Audio Loading**: You can provide custom audio URLs or use the built-in defaults.
-
-3. **Browser Compatibility**: The audio implementation handles browser autoplay restrictions gracefully with Promise-based error handling.
 
 ### DOM Handling
 
@@ -60,11 +47,11 @@ The `useElevator` hook is designed to create a smooth, pleasant scrolling experi
 
 2. **Dependency Optimization**: `useCallback` dependencies are minimized to prevent function recreation.
 
-3. **Memory Management**: All resources are properly cleaned up on unmount, including audio players and animation frames.
+3. **Memory Management**: All resources are properly cleaned up on unmount, including animation frames.
 
 ### Safety Features
 
-1. **Error Handling**: The hook contains comprehensive error handling around audio playback and DOM operations.
+1. **Error Handling**: The hook contains comprehensive error handling around DOM operations.
 
 2. **Type Safety**: Built with TypeScript, providing complete type definitions for all options and return values.
 
@@ -84,12 +71,8 @@ The useElevator hook is designed with a modular architecture for maintainability
 
 ```
 lib/
-├── assets/              # Audio files
-│   ├── elevator.mp3     # Main elevator music
-│   └── ding.mp3         # Ding sound at the end
 ├── utils/
-│   ├── animation.ts     # Animation utility functions
-│   └── audio.ts         # Audio management class
+│   └── animation.ts     # Animation utility functions
 ├── types.ts             # TypeScript interfaces
 ├── useElevator.ts       # Main hook implementation
 └── index.ts             # Public exports
@@ -109,13 +92,7 @@ lib/
    - Calculates element positions and scroll distances
    - Determines optimal animation durations
 
-3. **Audio Manager (utils/audio.ts)**
-
-   - Encapsulates audio player creation and management
-   - Handles browser autoplay restrictions
-   - Manages audio loading, playing, and cleanup
-
-4. **Type Definitions (types.ts)**
+3. **Type Definitions (types.ts)**
    - TypeScript interfaces for hook options and returns
    - Ensures type safety across the library
 
@@ -132,7 +109,6 @@ import { useElevator } from "use-elevator";
 
 function ScrollToTopButton() {
   const { startElevating, isElevating } = useElevator({
-    audio: true,
     duration: 2000,
   });
 
@@ -148,16 +124,13 @@ function ScrollToTopButton() {
 
 ### Options
 
-| Property        | Type     | Default                | Description                                                                                                             |
-| --------------- | -------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| targetElement   | string   | undefined              | The ID of the element to scroll to. If not provided, scrolls to the top of the page.                                    |
-| duration        | number   | 0 (auto)               | Duration of the scroll animation in milliseconds. If not provided, the duration is calculated based on scroll distance. |
-| mainAudioUrl    | string   | Default elevator music | URL of the audio to play during scrolling.                                                                              |
-| endAudioUrl     | string   | Default ding sound     | URL of the audio to play when scrolling finishes.                                                                       |
-| audio           | boolean  | true                   | Whether to play audio during the scroll animation.                                                                      |
-| verticalPadding | number   | 0                      | Padding from the target element to stop above it.                                                                       |
-| startCallback   | function | undefined              | Function to call when scrolling starts.                                                                                 |
-| endCallback     | function | undefined              | Function to call when scrolling ends.                                                                                   |
+| Property        | Type     | Default   | Description                                                                                                             |
+| --------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------- |
+| targetElement   | string   | undefined | The ID of the element to scroll to. If not provided, scrolls to the top of the page.                                    |
+| duration        | number   | 0 (auto)  | Duration of the scroll animation in milliseconds. If not provided, the duration is calculated based on scroll distance. |
+| verticalPadding | number   | 0         | Padding from the target element to stop above it.                                                                       |
+| startCallback   | function | undefined | Function to call when scrolling starts.                                                                                 |
+| endCallback     | function | undefined | Function to call when scrolling ends.                                                                                   |
 
 ### Returns
 
@@ -174,17 +147,6 @@ function ScrollToTopButton() {
 const { startElevating } = useElevator({
   targetElement: "contact-section",
   verticalPadding: 20,
-  audio: true,
-});
-```
-
-### Custom Audio
-
-```jsx
-const { startElevating } = useElevator({
-  mainAudioUrl: "/path/to/custom-music.mp3",
-  endAudioUrl: "/path/to/custom-ding.mp3",
-  audio: true,
 });
 ```
 
@@ -205,28 +167,22 @@ You can create multiple elevator instances with different configurations:
 
 ```jsx
 function App() {
-  // Elevator to the top of the page with music
+  // Elevator to the top of the page
   const topElevator = useElevator({
-    audio: true,
     duration: 2000,
   });
 
-  // Quiet elevator to a specific section
+  // Elevator to a specific section
   const sectionElevator = useElevator({
     targetElement: "contact-section",
-    audio: false,
     verticalPadding: 80,
   });
 
   return (
     <div>
-      <button onClick={topElevator.startElevating}>
-        Back to Top with Music
-      </button>
+      <button onClick={topElevator.startElevating}>Back to Top</button>
 
-      <button onClick={sectionElevator.startElevating}>
-        Jump to Contact (No Music)
-      </button>
+      <button onClick={sectionElevator.startElevating}>Jump to Contact</button>
     </div>
   );
 }

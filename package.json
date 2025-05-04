@@ -1,29 +1,13 @@
 {
   "name": "use-elevator",
   "version": "0.1.0",
-  "description": "A delightful React hook that transforms boring scroll-to-top actions into playful elevator experiences with music and smooth animations",
   "author": "Bilal Mansuri",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bilal-23/use-elevator.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "dev": "bun --bun vite",
-    "build": "bun --bun tsc && bun --bun vite build",
-    "build:lib": "tsc --project tsconfig.build.json && bun --bun build --target=node ./lib/index.ts --outdir=./dist",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "bun --bun vite preview",
-    "prepublishOnly": "bun run build:lib"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -43,9 +27,20 @@
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.8.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
   },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "description": "A delightful React hook that transforms boring scroll-to-top actions into playful elevator experiences with music and smooth animations",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "keywords": [
     "react",
     "hook",
@@ -55,8 +50,18 @@
     "smooth-scroll",
     "animation"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bilal-23/use-elevator.git"
+  "license": "MIT",
+  "scripts": {
+    "dev": "bun --bun vite",
+    "build": "bun --bun tsc && bun --bun vite build",
+    "build:lib": "rollup -c rollup.config.js",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "bun --bun vite preview",
+    "prepublishOnly": "bun run build:lib",
+    "start": "bun --bun vite"
+  },
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "use-elevator": "./use-elevator-0.1.0.tgz"
   }
 }

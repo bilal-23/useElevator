@@ -1,5 +1,6 @@
+import React from "react";
 import "./App.css";
-import { useElevator } from "../lib/useElevator";
+import { useElevator } from "use-elevator";
 import bearImg from "./assets/bear.png";
 import bear2Img from "./assets/bear-2.png";
 import cameraImg from "./assets/camera.png";
@@ -29,41 +30,65 @@ const images = {
 
 // Section data
 const sections = [
-  { text: "Let's make our way to the page's end.", image: images.bear2 },
-  { text: "Remember, we're starting from the very top.", image: images.bear },
+  {
+    text: "Let's make our way to the page's end.",
+    image: images.bear2,
+    name: "Friendly Bear",
+  },
+  {
+    text: "Remember, we're starting from the very top.",
+    image: images.bear,
+    name: "Sleepy Bear",
+  },
   {
     text: 'Thus, a "back to top" feature isn\'t immediately necessary.',
     image: images.camera,
+    name: "Camera",
   },
-  { text: "Heading deeper and deeper.", image: images.chick },
+  {
+    text: "Heading deeper and deeper.",
+    image: images.chick,
+    name: "Little Chick",
+  },
   {
     text: "Quite the journey with all this scrolling, isn't it?",
     image: images.down,
+    name: "Down Arrow",
   },
   {
     text: "The payoff for this scroll had better be significant.",
     image: images.elevator,
+    name: "Elevator",
   },
   {
     text: "Returning to the top seems like it'll be a lengthy endeavor.",
     image: images.hedgehog,
+    name: "Hedgehog",
   },
-  { text: "Wishing for a simpler method to ascend...", image: images.kitty },
+  {
+    text: "Wishing for a simpler method to ascend...",
+    image: images.kitty,
+    name: "Kitty",
+  },
   {
     text: "...one that's not only efficient but also entertaining.",
     image: images.rose,
+    name: "Rose",
   },
   {
     text: 'I prefer to think of "back to top" options as elevators...',
     image: images.sun,
+    name: "Sunshine",
   },
   {
     text: "...and they ought to mimic the real experience more closely.",
     image: images.down,
+    name: "Downward Path",
   },
   {
     text: "Finally, we've reached our destination... go ahead and activate that elevator!",
     image: images.elevator,
+    name: "Elevator Ride",
   },
 ];
 
@@ -72,33 +97,95 @@ interface SectionProps {
   text: string;
   image: string;
   id: number;
+  name: string;
 }
 
-const Section = ({ text, image, id }: SectionProps) => {
+const Section = ({ text, image, id, name }: SectionProps) => {
   return (
     <section id={id.toString()} className="section">
       <div>
-        <img src={image} alt="section image" className="section-image" />
+        <img src={image} alt={name} className="section-image" />
       </div>
+      <h3 className="section-name">{name}</h3>
       <p className="section-text">{text}</p>
     </section>
   );
 };
 
-// ScrollToTop Component
-const ScrollToTop = () => {
-  const { startElevating } = useElevator({
-    audio: true,
+// Settings type
+interface ElevatorSettings {
+  duration: number;
+  targetElement: string | undefined;
+}
+
+// ScrollToTop Component with Settings
+const ScrollToTop = React.memo(() => {
+  const [settings, setSettings] = React.useState<ElevatorSettings>({
     duration: 5000,
+    targetElement: undefined,
   });
 
+  const { startElevating, isElevating } = useElevator({
+    duration: settings.duration,
+    targetElement: settings.targetElement,
+  });
+
+  const handleSettingsChange = (
+    key: keyof ElevatorSettings,
+    value: number | string | undefined
+  ) => {
+    setSettings((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
   return (
-    <div className="scroll-to-top" onClick={startElevating}>
-      <img src={images.up} alt="up arrow" />
-      <p>Lessgoooo</p>
+    <div className="scroll-to-top-container">
+      <div className="elevator-settings">
+        <div className="setting-group">
+          <label htmlFor="duration">Duration (ms):</label>
+          <input
+            id="duration"
+            type="range"
+            min="500"
+            max="10000"
+            step="500"
+            value={settings.duration}
+            onChange={(e) =>
+              handleSettingsChange("duration", Number(e.target.value))
+            }
+          />
+          <span className="duration-value">{settings.duration}ms</span>
+        </div>
+
+        <div className="setting-group">
+          <label htmlFor="target-element">Target Element:</label>
+          <select
+            id="target-element"
+            value={settings.targetElement || ""}
+            onChange={(e) =>
+              handleSettingsChange("targetElement", e.target.value || undefined)
+            }
+            className="pastel-dropdown"
+          >
+            <option value="">Top of page</option>
+            {sections.map((section, index) => (
+              <option key={index} value={index.toString()}>
+                {section.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="scroll-to-top" onClick={startElevating}>
+        <img src={images.up} alt="up arrow" />
+        <p>{isElevating ? "Going up..." : "Lessgoooo"}</p>
+      </div>
     </div>
   );
-};
+});
 
 // HeroButton Component
 const HeroButton = ({
@@ -190,7 +277,13 @@ function App() {
       </div>
 
       {sections.map((item, index) => (
-        <Section key={index} id={index} text={item.text} image={item.image} />
+        <Section
+          key={index}
+          id={index}
+          text={item.text}
+          image={item.image}
+          name={item.name}
+        />
       ))}
 
       <ScrollToTop />
